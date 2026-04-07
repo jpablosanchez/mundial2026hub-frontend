@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { guardarPreferencias, obtenerPreferencias } from '../services/authService';
+import '../App.css';
 
 const seleccionesDisponibles = [
     'COL', 'ARG', 'BRA', 'MEX', 'USA', 'ESP', 'FRA', 'ALE', 'POR', 'ENG'
@@ -10,6 +11,11 @@ const ciudadesDisponibles = [
     'New York', 'Los Angeles', 'Miami', 'Dallas', 'San Francisco',
     'Toronto', 'Vancouver', 'Ciudad de México', 'Guadalajara', 'Monterrey'
 ];
+
+const banderasMap = {
+    COL: '🇨🇴', ARG: '🇦🇷', BRA: '🇧🇷', MEX: '🇲🇽', USA: '🇺🇸',
+    ESP: '🇪🇸', FRA: '🇫🇷', ALE: '🇩🇪', POR: '🇵🇹', ENG: '🏴󠁧󠁢󠁥󠁮󠁧󠁿'
+};
 
 const Preferencias = () => {
     const navigate = useNavigate();
@@ -40,7 +46,7 @@ const Preferencias = () => {
         cargarPreferencias();
     }, []);
 
-    const toggleSeleccion = (item, lista, setLista) => {
+    const toggleItem = (item, lista, setLista) => {
         if (lista.includes(item)) {
             setLista(lista.filter(i => i !== item));
         } else {
@@ -69,84 +75,123 @@ const Preferencias = () => {
         }
     };
 
+    const getInitials = () => {
+        const n = usuario?.nombres?.[0] || '';
+        const a = usuario?.apellidos?.[0] || '';
+        return (n + a).toUpperCase();
+    };
+
     return (
-        <div className="container py-5">
-            <div className="card shadow p-4 mx-auto" style={{ maxWidth: '600px' }}>
-                <h2 className="text-center fw-bold mb-2" style={{ color: '#8B0000' }}>
-                    ⚽ Mundial 2026 Hub
-                </h2>
-                <h5 className="text-center mb-4">
-                    Hola {usuario?.nombres}, configura tus preferencias
-                </h5>
-                {mensaje && <div className="alert alert-success">{mensaje}</div>}
-                {error && <div className="alert alert-danger">{error}</div>}
-                <form onSubmit={handleSubmit}>
+        <>
+            <div className="mundial-bg"></div>
+            <div className="mundial-content">
+                {/* Navbar */}
+                <nav className="mundial-navbar">
+                    <div className="navbar-brand" style={{ cursor: 'pointer' }} onClick={() => navigate('/dashboard')}>
+                        <span className="navbar-brand-icon">⚽</span>
+                        <span className="navbar-brand-text">Mundial 2026 Hub</span>
+                    </div>
+                    <div className="navbar-user">
+                        <span className="navbar-user-name">{usuario?.nombres} {usuario?.apellidos}</span>
+                        <div className="navbar-avatar">{getInitials()}</div>
+                    </div>
+                </nav>
 
-                    <h6 className="fw-bold mb-2">🏆 Selecciones favoritas</h6>
-                    <div className="d-flex flex-wrap gap-2 mb-4">
-                        {seleccionesDisponibles.map(s => (
+                {/* Preferences content */}
+                <div className="pref-page animate-in">
+                    <div className="pref-header">
+                        <h1>Mis <span>Preferencias</span></h1>
+                        <p>Personaliza tu experiencia en el Mundial 2026, {usuario?.nombres}</p>
+                    </div>
+
+                    {mensaje && <div className="alert-mundial alert-success">{mensaje}</div>}
+                    {error && <div className="alert-mundial alert-danger">{error}</div>}
+
+                    <form onSubmit={handleSubmit}>
+                        {/* Selecciones */}
+                        <div className="pref-section">
+                            <div className="pref-section-title">
+                                <span>🏆</span> Selecciones Favoritas
+                            </div>
+                            <div className="chip-grid">
+                                {seleccionesDisponibles.map(s => (
+                                    <button
+                                        key={s}
+                                        type="button"
+                                        className={`chip ${selecciones.includes(s) ? 'selected' : ''}`}
+                                        onClick={() => toggleItem(s, selecciones, setSelecciones)}
+                                    >
+                                        {banderasMap[s]} {s}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Ciudades */}
+                        <div className="pref-section">
+                            <div className="pref-section-title">
+                                <span>🏟️</span> Ciudades de Interés
+                            </div>
+                            <div className="chip-grid">
+                                {ciudadesDisponibles.map(c => (
+                                    <button
+                                        key={c}
+                                        type="button"
+                                        className={`chip ${ciudades.includes(c) ? 'selected' : ''}`}
+                                        onClick={() => toggleItem(c, ciudades, setCiudades)}
+                                    >
+                                        {c}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Notificaciones */}
+                        <div className="pref-section">
+                            <div className="pref-section-title">
+                                <span>🔔</span> Notificaciones
+                            </div>
+                            <div className="switch-row">
+                                <span className="switch-label">Notificaciones Push</span>
+                                <div
+                                    className={`switch-toggle ${notifPush === 1 ? 'active' : ''}`}
+                                    onClick={() => setNotifPush(notifPush === 1 ? 0 : 1)}
+                                ></div>
+                            </div>
+                            <div className="switch-row">
+                                <span className="switch-label">Notificaciones Email</span>
+                                <div
+                                    className={`switch-toggle ${notifEmail === 1 ? 'active' : ''}`}
+                                    onClick={() => setNotifEmail(notifEmail === 1 ? 0 : 1)}
+                                ></div>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="pref-actions">
                             <button
-                                key={s}
                                 type="button"
-                                className={`btn btn-sm ${selecciones.includes(s)
-                                    ? 'text-white' : 'btn-outline-secondary'}`}
-                                style={selecciones.includes(s)
-                                    ? { backgroundColor: '#8B0000' } : {}}
-                                onClick={() => toggleSeleccion(s, selecciones, setSelecciones)}
+                                className="btn-outline-green"
+                                onClick={() => navigate('/dashboard')}
                             >
-                                {s}
+                                Volver al Dashboard
                             </button>
-                        ))}
-                    </div>
-
-                    <h6 className="fw-bold mb-2">🏙️ Ciudades de interés</h6>
-                    <div className="d-flex flex-wrap gap-2 mb-4">
-                        {ciudadesDisponibles.map(c => (
                             <button
-                                key={c}
-                                type="button"
-                                className={`btn btn-sm ${ciudades.includes(c)
-                                    ? 'text-white' : 'btn-outline-secondary'}`}
-                                style={ciudades.includes(c)
-                                    ? { backgroundColor: '#8B0000' } : {}}
-                                onClick={() => toggleSeleccion(c, ciudades, setCiudades)}
+                                type="submit"
+                                className="btn-primary-glow"
+                                disabled={loading}
                             >
-                                {c}
+                                {loading ? 'Guardando...' : 'Guardar Preferencias'}
                             </button>
-                        ))}
-                    </div>
+                        </div>
+                    </form>
+                </div>
 
-                    <h6 className="fw-bold mb-2">🔔 Notificaciones</h6>
-                    <div className="form-check form-switch mb-2">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={notifPush === 1}
-                            onChange={() => setNotifPush(notifPush === 1 ? 0 : 1)}
-                        />
-                        <label className="form-check-label">Notificaciones Push</label>
-                    </div>
-                    <div className="form-check form-switch mb-4">
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={notifEmail === 1}
-                            onChange={() => setNotifEmail(notifEmail === 1 ? 0 : 1)}
-                        />
-                        <label className="form-check-label">Notificaciones Email</label>
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="btn w-100 text-white"
-                        style={{ backgroundColor: '#8B0000' }}
-                        disabled={loading}
-                    >
-                        {loading ? 'Guardando...' : 'Guardar Preferencias'}
-                    </button>
-                </form>
+                <div className="mundial-footer">
+                    FIFA World Cup 2026™ — USA · México · Canadá
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

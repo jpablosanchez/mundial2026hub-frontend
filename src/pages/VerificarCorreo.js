@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { verificarCorreo } from '../services/authService';
+import '../App.css';
 
 const VerificarCorreo = () => {
     const [searchParams] = useSearchParams();
-    const [estado, setEstado] = useState('cargando'); // 'cargando' | 'exito' | 'error'
+    const [estado, setEstado] = useState('cargando');
     const [mensaje, setMensaje] = useState('');
     const yaVerificado = useRef(false);
 
@@ -31,52 +32,56 @@ const VerificarCorreo = () => {
     }, [searchParams]);
 
     return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-100">
-            <div className="card shadow p-5 text-center" style={{ width: '480px' }}>
-                <h2 className="fw-bold mb-4" style={{ color: '#8B0000' }}>
-                    ⚽ Mundial 2026 Hub
-                </h2>
+        <>
+            <div className="mundial-bg"></div>
+            <div className="mundial-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '2rem' }}>
+                <div className="verify-card animate-in">
+                    <div className="auth-logo" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
+                        <span className="auth-logo-icon">⚽</span>
+                        <span className="auth-logo-text">Mundial 2026 Hub</span>
+                    </div>
 
-                {estado === 'cargando' && (
-                    <>
-                        <div className="spinner-border mb-3" style={{ color: '#8B0000' }} role="status">
-                            <span className="visually-hidden">Verificando...</span>
+                    {estado === 'cargando' && (
+                        <>
+                            <div className="spinner-green"></div>
+                            <p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>
+                                Verificando tu correo electrónico...
+                            </p>
+                        </>
+                    )}
+
+                    {estado === 'exito' && (
+                        <div className="animate-in">
+                            <span className="verify-icon">🎉</span>
+                            <div className="verify-title" style={{ color: 'var(--success)' }}>
+                                ¡Correo Verificado!
+                            </div>
+                            <p className="verify-msg">{mensaje}</p>
+                            <Link to="/login" className="btn-primary-glow" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+                                Iniciar Sesión
+                            </Link>
                         </div>
-                        <p className="text-muted">Verificando tu correo electrónico...</p>
-                    </>
-                )}
+                    )}
 
-                {estado === 'exito' && (
-                    <>
-                        <div style={{ fontSize: '60px', marginBottom: '16px' }}>✅</div>
-                        <h4 className="text-success mb-3">¡Correo verificado!</h4>
-                        <p className="text-muted mb-4">{mensaje}</p>
-                        <Link
-                            to="/login"
-                            className="btn w-100 text-white"
-                            style={{ backgroundColor: '#8B0000' }}
-                        >
-                            Iniciar sesión
-                        </Link>
-                    </>
-                )}
+                    {estado === 'error' && (
+                        <div className="animate-in">
+                            <span className="verify-icon">😞</span>
+                            <div className="verify-title" style={{ color: 'var(--danger)' }}>
+                                Error de Verificación
+                            </div>
+                            <p className="verify-msg">{mensaje}</p>
+                            <Link to="/registro" className="btn-outline-green" style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}>
+                                Volver al Registro
+                            </Link>
+                        </div>
+                    )}
 
-                {estado === 'error' && (
-                    <>
-                        <div style={{ fontSize: '60px', marginBottom: '16px' }}>❌</div>
-                        <h4 className="text-danger mb-3">Error de verificación</h4>
-                        <p className="text-muted mb-4">{mensaje}</p>
-                        <Link
-                            to="/registro"
-                            className="btn w-100 text-white"
-                            style={{ backgroundColor: '#8B0000' }}
-                        >
-                            Volver al registro
-                        </Link>
-                    </>
-                )}
+                    <div style={{ marginTop: '2rem', color: 'var(--text-muted)', fontSize: '0.7rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                        FIFA World Cup 2026™ — USA · México · Canadá
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
