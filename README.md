@@ -1,0 +1,1 @@
+# mundial2026hub-frontend
