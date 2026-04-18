@@ -84,23 +84,29 @@ const Dashboard = () => {
                     </div>
 
                     {/* Calendario */}
-                    <div className="dash-card disabled animate-in stagger-2">
+                    <div
+                        className="dash-card animate-in stagger-2"
+                        onClick={() => navigate('/calendario')}
+                    >
                         <span className="dash-card-icon">📅</span>
                         <div className="dash-card-title">Calendario</div>
                         <div className="dash-card-desc">
                             Consulta el calendario completo de partidos con fechas, horarios y sedes.
                         </div>
-                        <span className="dash-card-badge badge-soon">Próximamente</span>
+                        <span className="dash-card-badge badge-active">Disponible</span>
                     </div>
 
                     {/* Resultados */}
-                    <div className="dash-card disabled animate-in stagger-3">
+                    <div
+                        className="dash-card animate-in stagger-3"
+                        onClick={() => navigate('/resultados')}
+                    >
                         <span className="dash-card-icon">📊</span>
-                        <div className="dash-card-title">Resultados en Vivo</div>
+                        <div className="dash-card-title">Resultados</div>
                         <div className="dash-card-desc">
-                            Marcadores en tiempo real, estadísticas de cada partido y resúmenes.
+                            Marcadores finales, estadísticas de cada partido y resúmenes del torneo.
                         </div>
-                        <span className="dash-card-badge badge-soon">Próximamente</span>
+                        <span className="dash-card-badge badge-active">Disponible</span>
                     </div>
 
                     {/* Selecciones — wide */}
@@ -123,14 +129,17 @@ const Dashboard = () => {
                         <span className="dash-card-badge badge-soon">Próximamente</span>
                     </div>
 
-                    {/* Estadios — wide */}
-                    <div className="dash-card dash-card-wide disabled animate-in stagger-6">
-                        <span className="dash-card-icon">🏟️</span>
-                        <div className="dash-card-title">Sedes y Estadios</div>
+                    {/* Agenda por Ciudad — wide */}
+                    <div
+                        className="dash-card dash-card-wide animate-in stagger-6"
+                        onClick={() => navigate('/agenda-ciudad')}
+                    >
+                        <span className="dash-card-icon">🗺️</span>
+                        <div className="dash-card-title">Agenda por Ciudad</div>
                         <div className="dash-card-desc">
-                            Explora las 16 ciudades sede, capacidad de los estadios, clima y transporte. Planifica tu viaje al mundial con información detallada.
+                            Busca partidos por ciudad o estadio y agrégalos a tu agenda personal. Planifica tu experiencia en las 16 ciudades sede del mundial.
                         </div>
-                        <span className="dash-card-badge badge-soon">Próximamente</span>
+                        <span className="dash-card-badge badge-active">Disponible</span>
                     </div>
 
                     {/* Predicciones */}

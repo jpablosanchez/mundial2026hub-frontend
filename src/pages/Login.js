@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginUsuario } from '../services/authService';
+import { loginUsuario, obtenerPreferencias } from '../services/authService';
 import '../App.css';
 
 const Login = () => {
@@ -23,7 +23,13 @@ const Login = () => {
         try {
             const response = await loginUsuario(formData);
             localStorage.setItem('usuario', JSON.stringify(response.usuario));
-            navigate('/preferencias');
+            // Primera vez: si no tiene preferencias → /preferencias; si ya las tiene → /dashboard
+            try {
+                await obtenerPreferencias(response.usuario.id);
+                navigate('/dashboard');
+            } catch {
+                navigate('/preferencias');
+            }
         } catch (err) {
             setError(err.response?.data?.mensaje || 'Error al iniciar sesión.');
         } finally {
