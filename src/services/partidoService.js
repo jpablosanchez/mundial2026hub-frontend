@@ -1,4 +1,5 @@
 import axios from 'axios';
+import api from './apiClient';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -36,8 +37,8 @@ export const getAgendaPorEstadio = (estadio) =>
 
 // HU-06: Agendar partido → POST /agenda/agregar con {idUsuario, idPartido}
 export const agregarAgenda = (idUsuario, idPartido) =>
-    axios.post(`${BASE_URL}/agenda/agregar`, { idUsuario, idPartido });
+    api.post('/agenda/agregar', { idUsuario, idPartido });
 
 // HU-06: Quitar partido de agenda personal
 export const eliminarAgenda = (id) =>
-    axios.delete(`${BASE_URL}/agenda/${id}`);
+    api.delete(`/agenda/${id}`);
