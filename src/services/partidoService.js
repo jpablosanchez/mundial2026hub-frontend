@@ -1,7 +1,7 @@
 import axios from 'axios';
 import api from './apiClient';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 // El backend devuelve 404 cuando la lista está vacía (no es un error real).
 // Este helper convierte 404 en array vacío para no romper el frontend.

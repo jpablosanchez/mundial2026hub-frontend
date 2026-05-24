@@ -1,7 +1,7 @@
 import axios from 'axios';
 import api from './apiClient';
 
-const BASE = 'http://localhost:8080';
+const BASE = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 const orEmpty = (p) => p.catch(e => { if (e.response?.status === 404) return { data: [] }; throw e; });
 
 // ── Pollas ────────────────────────────────────────────────────────────────────
