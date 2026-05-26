@@ -2,5 +2,12 @@
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
-  }
+  },
+  "routes": [
+    {
+      "route": "/*",
+      "redirect": "https://www.proyecto2026hub.store",
+      "statusCode": 301
+    }
+  ]
 }
